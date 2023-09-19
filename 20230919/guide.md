@@ -88,6 +88,12 @@ git clone https://github.com/arut/nginx-rtmp-module.git objs/lib/nginx-rtmp-modu
 以下３つのパッケージのソースをダウンロード、/o/src/nginxに保存、objs/libへ展開する。
 
 ```console
+wget https://github.com/PCRE2Project/pcre2/releases/download/pcre2-10.42/pcre2-10.42.tar.gz
+wget http://zlib.net/zlib-1.3.tar.gz
+wget https://www.openssl.org/source/openssl-1.1.1w.tar.gz
+```
+
+```console
 tar -xzf pcre2-10.42.tar.gz -C objs/lib
 tar -xzf zlib-1.3.tar.gz -C objs/lib
 tar -xzf openssl-1.1.1w.tar.gz -C objs/lib
