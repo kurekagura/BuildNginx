@@ -1,0 +1,86 @@
+# nginxの。CPUコア数より少なくする。auto設定でもOK。
+worker_processes  1;
+
+events {
+    # 1workerプロセスがオープンできる同時接続数。
+    # 1workerにおけるファイルディスクリプタの上限数（worker_rlimit_nofile）と関係する。
+    worker_connections  1024;
+}
+
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+
+    # レスポンス処理にsendfileシステムコールを使うかどうか。パフォーマンス向上するが不安定？
+    sendfile        off;
+
+    # 404 Not Foundにnginxバージョンを表示しない。
+    server_tokens off;
+    
+    keepalive_timeout  65;
+
+    server {
+        listen       8080;
+        server_name  localhost;
+
+        location / {
+            root   html;
+            index  index.html index.htm;
+        }
+
+         # 専用エラーページを提供する
+#        error_page 400 403 404  /40x.html;
+#        location = /40x.html {
+#            root   html;
+#        }
+
+       location /hls {
+            # キャッシュ無効化
+            add_header 'Cache-Control' 'no-cache';
+            types{  
+                application/vnd.apple.mpegurl m3u8;  
+                video/mp2t ts;  
+            }  
+            alias temp/hls;  
+            expires -1;  
+        }
+
+        location /dash {
+            add_header 'Cache-Control' 'no-cache';
+            types{  
+                application/dash+xml mpd;
+            }
+            alias temp/dash;
+            expires -1;
+        }
+    }
+
+}
+
+# rtmpの構成
+rtmp {
+    server {
+        listen 1935;
+        chunk_size 4096;
+
+        # ライブ配信元を制限
+        #127.0.0.1;
+        #deny publish all;
+
+        application dash {
+            live on;
+            record off;
+            dash on;
+            dash_path temp/dash;
+            dash_fragment 5s;
+        }
+
+        application hls {
+            live on;
+            record off;
+            hls on;  
+            hls_path temp/hls;
+            hls_fragment 1s;
+        }
+    }
+}
