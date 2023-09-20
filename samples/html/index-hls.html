@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+    <title>Live Streaming by HLS</title>
+    <h1>Playing by hls.js</h1>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        video {
+            width: 90%;
+            height: 90%;
+            align-self: center;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <video autoplay controls id="video"></video>
+    </div>
+<script>
+  var video = document.getElementById("video");
+  var vsrc = "/hls/ch1.m3u8";
+  if (Hls.isSupported()) {
+    var hls = new Hls();
+    hls.loadSource(vsrc);
+    hls.attachMedia(video);
+  }else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+    video.src = vsrc;
+  }
+</script>
+</body>
+</html>
