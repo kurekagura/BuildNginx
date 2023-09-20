@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head>
+    <title>Live Streaming by MPEG-DASH</title>
+    <script src="http://cdn.dashjs.org/latest/dash.all.min.js"></script>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        video {
+            width: 90%;
+            height: 90%;
+            align-self: center;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <video data-dashjs-player autoplay src="/dash/ch1.mpd" controls>
+        </video>
+    </div>
+</body>
+</html>
